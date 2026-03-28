@@ -6,12 +6,12 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
-    color: rgb(252, 252, 252);
+    color: rgb(255, 255, 255);
  
 }
 
 .option.selected {
-    background: #ff7a18 !important;
+    background: #346d5c !important;
     color: white;
 }
 
@@ -21,7 +21,7 @@ body {
     font-weight: bold;
 }
 #timer {
-    color: white;
+    color: rgb(238, 49, 49);
     font-size: 20px;
     display: block !important;
 }
@@ -73,6 +73,7 @@ input {
     border: none;
     border-radius: 8px;
 }
+
 
 button {
     padding: 10px 20px;
