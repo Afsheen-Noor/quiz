@@ -1,0 +1,99 @@
+const express = require("express");
+const mysql = require("mysql2");
+const cors = require("cors");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// Connect to MySQL
+const db = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "Afsheen@143",
+    database: "quiz_app"
+});
+
+db.connect(err => {
+    if (err) {
+        console.log("Database connection failed:", err);
+    } else {
+        console.log("Connected to MySQL");
+    }
+});
+
+
+// ✅ API 1: Get Questions
+app.get("/questions", (req, res) => {
+    const query = `
+        SELECT q.id, q.question_text, o.option_text
+        FROM questions q
+        JOIN options o ON q.id = o.question_id
+    `;
+
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).send(err);
+
+        let formatted = {};
+
+        results.forEach(row => {
+            if (!formatted[row.id]) {
+                formatted[row.id] = {
+                    id: row.id,
+                    question: row.question_text,
+                    options: []
+                };
+            }
+            formatted[row.id].options.push(row.option_text);
+        });
+
+        res.json(Object.values(formatted));
+    });
+});
+
+
+// Start server
+app.listen(3000, () => {
+    console.log("Server running on http://localhost:3000");
+});
+app.post("/submit", (req, res) => {
+    const userAnswers = req.body.answers;
+
+    const query = `
+        SELECT q.id, o.option_text, o.is_correct
+        FROM questions q
+        JOIN options o ON q.id = o.question_id
+        ORDER BY q.id
+    `;
+
+    db.query(query, (err, results) => {
+        if (err) return res.status(500).send(err);
+
+        let correctAnswers = {};
+        let questionOrder = [];
+
+        // Extract correct answers
+        results.forEach(row => {
+            if (!questionOrder.includes(row.id)) {
+                questionOrder.push(row.id);
+            }
+
+            if (row.is_correct) {
+                correctAnswers[row.id] = row.option_text;
+            }
+        });
+
+        // Calculate score
+        let score = 0;
+
+        userAnswers.forEach((ans, index) => {
+            let qId = questionOrder[index];
+
+            if (ans === correctAnswers[qId]) {
+                score++;
+            }
+        });
+
+        res.json({ score });
+    });
+});
