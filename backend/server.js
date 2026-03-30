@@ -36,25 +36,6 @@ app.get("/questions", (req, res) => {
   });
 });
 
-    db.query(query, (err, results) => {
-        if (err) return res.status(500).send(err);
-
-        let formatted = {};
-
-        results.forEach(row => {
-            if (!formatted[row.id]) {
-                formatted[row.id] = {
-                    id: row.id,
-                    question: row.question_text,
-                    options: []
-                };
-            }
-            formatted[row.id].options.push(row.option_text);
-        });
-
-        res.json(Object.values(formatted));
-    });
-
 
 
 // Start server
@@ -62,43 +43,19 @@ app.listen(process.env.PORT || 3000, () => {
     console.log("Server is running");
 });
 app.post("/submit", (req, res) => {
-    const userAnswers = req.body.answers;
+  const userAnswers = req.body.answers;
 
-    const query = `
-        SELECT q.id, o.option_text, o.is_correct
-        FROM questions q
-        JOIN options o ON q.id = o.question_id
-        ORDER BY q.id
-    `;
+  db.query("SELECT * FROM questions", (err, results) => {
+    if (err) return res.status(500).send(err);
 
-    db.query(query, (err, results) => {
-        if (err) return res.status(500).send(err);
+    let score = 0;
 
-        let correctAnswers = {};
-        let questionOrder = [];
-
-        // Extract correct answers
-        results.forEach(row => {
-            if (!questionOrder.includes(row.id)) {
-                questionOrder.push(row.id);
-            }
-
-            if (row.is_correct) {
-                correctAnswers[row.id] = row.option_text;
-            }
-        });
-
-        // Calculate score
-        let score = 0;
-
-        userAnswers.forEach((ans, index) => {
-            let qId = questionOrder[index];
-
-            if (ans === correctAnswers[qId]) {
-                score++;
-            }
-        });
-
-        res.json({ score });
+    userAnswers.forEach((ans, index) => {
+      if (ans === results[index].correct_answer) {
+        score++;
+      }
     });
+
+    res.json({ score });
+  });
 });
