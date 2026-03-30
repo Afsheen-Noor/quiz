@@ -2,7 +2,7 @@ let questions = [];
 let userAnswers = [];
 let currentQuestion = 0;
 let username = "";
-let timeLeft = 10;
+let timeLeft = 15;
 let timer;
 
 async function startQuiz() {
@@ -22,24 +22,25 @@ async function startQuiz() {
 
     loadQuestion();
 }
+const options = [
+  question.option1,
+  question.option2,
+  question.option3,
+  question.option4
+];
+
+
 
 function loadQuestion() 
 {
     let q = questions[currentQuestion];
 
-    document.getElementById("question").innerText = q.question;
-
-    let optionsHTML = "";
-    q.options.forEach(option => {
-        let selectedClass = userAnswers[currentQuestion] === option ? "selected" : "";
-
-        optionsHTML += `
-            <div class="option ${selectedClass}" 
-                 onclick="selectAnswer('${option}', this)">
-                ${option}
-            </div>
-        `;
-    });
+    options.forEach((opt) => {
+  const btn = document.createElement("button");
+  btn.innerText = opt;
+  btn.onclick = () => selectAnswer(opt);
+  optionsContainer.appendChild(btn);
+});
 
     document.getElementById("options").innerHTML = optionsHTML;
 
