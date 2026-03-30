@@ -8,18 +8,19 @@ app.use(express.json());
 
 // Connect to MySQL
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "Afsheen@143",
-    database: "quiz_app"
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  password: process.env.MYSQLPASSWORD,
+  database: process.env.MYSQLDATABASE,
+  port: process.env.MYSQLPORT
 });
 
-db.connect(err => {
-    if (err) {
-        console.log("Database connection failed:", err);
-    } else {
-        console.log("Connected to MySQL");
-    }
+db.connect((err) => {
+  if (err) {
+    console.error("Database connection failed:", err);
+  } else {
+    console.log("Connected to Railway MySQL");
+  }
 });
 
 
