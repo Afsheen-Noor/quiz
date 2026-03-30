@@ -54,7 +54,7 @@ app.get("/questions", (req, res) => {
 
         res.json(Object.values(formatted));
     });
-});
+
 
 
 // Start server
