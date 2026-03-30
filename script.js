@@ -93,7 +93,7 @@ function nextQuestion() {
     }
 }
 async function showResult() {
-    const res = await fetch("http://quiz-hh6t.onrender.com/submit", {
+    const res = await fetch("https://quiz-hh6t.onrender.com/submit", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
