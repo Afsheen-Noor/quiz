@@ -26,11 +26,15 @@ db.connect((err) => {
 
 // ✅ API 1: Get Questions
 app.get("/questions", (req, res) => {
-    const query = `
-        SELECT q.id, q.question_text, o.option_text
-        FROM questions q
-        JOIN options o ON q.id = o.question_id
-    `;
+  db.query("SELECT * FROM questions", (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error fetching questions");
+    } else {
+      res.json(results);
+    }
+  });
+});
 
     db.query(query, (err, results) => {
         if (err) return res.status(500).send(err);
