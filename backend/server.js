@@ -27,6 +27,7 @@ db.connect((err) => {
 // ✅ API 1: Get Questions
 app.get("/questions", (req, res) => 
 {
+  app.get("/questions", (req, res) => {
   db.query("SELECT * FROM questions", (err, results) => {
     if (err) {
       console.log("Error:", err);
@@ -35,6 +36,7 @@ app.get("/questions", (req, res) =>
       res.json(results);
     }
   });
+       });
  });
 
     db.query(query, (err, results) => {
