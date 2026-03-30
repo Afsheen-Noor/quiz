@@ -25,19 +25,16 @@ db.connect((err) => {
 
 
 // ✅ API 1: Get Questions
-app.get("/questions", (req, res) => 
-{
-  app.get("/questions", (req, res) => {
+app.get("/questions", (req, res) => {
   db.query("SELECT * FROM questions", (err, results) => {
     if (err) {
-      console.log("Error:", err);
+      console.log(err);
       res.status(500).send("Error fetching questions");
     } else {
       res.json(results);
     }
   });
-       });
- });
+});
 
     db.query(query, (err, results) => {
         if (err) return res.status(500).send(err);
