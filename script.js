@@ -14,7 +14,7 @@ async function startQuiz() {
     }
 
     // Fetch questions from backend
-    const res = await fetch("http://localhost:3000/questions");
+    const res = await fetch("https://quiz-hh6t.onrender.com/questions");
     questions = await res.json();
 
     document.getElementById("start-screen").classList.add("hidden");
@@ -93,7 +93,7 @@ function nextQuestion() {
     }
 }
 async function showResult() {
-    const res = await fetch("http://localhost:3000/submit", {
+    const res = await fetch("http://quiz-hh6t.onrender.com/submit", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
