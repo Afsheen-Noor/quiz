@@ -34,6 +34,12 @@ const options = [
 function loadQuestion() {
     let q = questions[currentQuestion];
 
+    // Safety check
+    if (!q) {
+        console.log("Question not found");
+        return;
+    }
+
     document.getElementById("question").innerText = q.question;
 
     let options = [
@@ -58,7 +64,7 @@ function loadQuestion() {
 
     document.getElementById("options").innerHTML = optionsHTML;
 
-    startTimer();
+    startTimer(); // timer works after this fix
 }
 
 function startTimer() {
