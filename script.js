@@ -31,38 +31,52 @@ const options = [
 
 
 
-function loadQuestion() 
-{
+function loadQuestion() {
     let q = questions[currentQuestion];
 
-    options.forEach((opt) => {
-  const btn = document.createElement("button");
-  btn.innerText = opt;
-  btn.onclick = () => selectAnswer(opt);
-  optionsContainer.appendChild(btn);
-});
+    document.getElementById("question").innerText = q.question;
+
+    let options = [
+        q.option1,
+        q.option2,
+        q.option3,
+        q.option4
+    ];
+
+    let optionsHTML = "";
+
+    options.forEach(option => {
+        let selectedClass = userAnswers[currentQuestion] === option ? "selected" : "";
+
+        optionsHTML += `
+            <div class="option ${selectedClass}" 
+                 onclick="selectAnswer('${option}', this)">
+                ${option}
+            </div>
+        `;
+    });
 
     document.getElementById("options").innerHTML = optionsHTML;
 
-    startTimer(); // ✅ start timer for each question
+    startTimer();
 }
 
 function startTimer() {
-    clearInterval(timer); // reset previous timer
+    clearInterval(timer); // stop old timer
+
     timeLeft = 15;
 
-    document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
+    const timerElement = document.getElementById("timer");
+    timerElement.innerText = `Time left: ${timeLeft}s`;
 
     timer = setInterval(() => {
         timeLeft--;
-        document.getElementById("timer").innerText = `Time left: ${timeLeft}s`;
+        timerElement.innerText = `Time left: ${timeLeft}s`;
 
-        if (timeLeft <= 0) 
-        {
-          clearInterval(timer);
-           nextQuestion(); // ✅ THIS LINE IS IMPORTANT
-             
-         }
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            nextQuestion(); // move automatically
+        }
     }, 1000);
 }
 
